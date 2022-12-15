@@ -9,6 +9,7 @@
 #include "GameFramework/Actor.h"
 #include "FloorTiles.generated.h"
 
+class ACoinItem;
 class UStaticMeshComponent;
 class UBoxComponent;
 class USceneComponent;
@@ -29,6 +30,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
 		TSubclassOf<AObstacle> BigObstacleClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+		TSubclassOf<ACoinItem> CoinItemClass;
 
 #pragma endregion TSubclassOf
 
@@ -59,6 +63,15 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<AActor*> ChildActors;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+		float SpawnPercent1 = 0.1f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+		float SpawnPercent2 = 0.3f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+		float SpawnPercent3 = 0.5f;
 
 	UFUNCTION(BlueprintCallable)
 		void SpawnItems();

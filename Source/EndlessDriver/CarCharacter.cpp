@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "EndlessDriverGameModeBase.h"
+#include "GameFramework/PlayerStart.h"
 
 
 
@@ -44,6 +45,10 @@ void ACarCharacter::BeginPlay()
 	
 }
 
+void ACarCharacter::AddCoin()
+{
+	DriveGameMode->AddCoin();
+}
 
 // Called every frame
 void ACarCharacter::Tick(float DeltaTime)
@@ -84,6 +89,48 @@ void ACarCharacter::ChangeLaneUpdate(float Value)
 void ACarCharacter::ChangeLaneFinsihed()
 {
 	CurrentLane = NextLane;
+}
+
+void ACarCharacter::Death()
+{
+	if (!bIsDead)
+	{
+		const FVector Location = GetActorLocation();
+
+		UWorld* World = GetWorld();
+
+		if (World)
+		{
+			bIsDead = true;
+			DisableInput(nullptr);
+
+			if (DeathParticleSystem)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(World, DeathParticleSystem, Location);
+			}
+
+			if (DeathSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(World, DeathSound, Location);
+			}
+
+			GetMesh()->SetVisibility(false);
+
+			World->GetTimerManager().SetTimer(RestartTimerHandle, this, &ACarCharacter::OnDeath, 1.f);
+		}
+	}
+}
+
+void ACarCharacter::OnDeath()
+{
+	bIsDead = false;
+
+	if (RestartTimerHandle.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(RestartTimerHandle);
+	}
+
+	UKismetSystemLibrary::ExecuteConsoleCommand(GetWorld(),TEXT("RestartLevel"));
 }
 
 void ACarCharacter::MoveLeft()

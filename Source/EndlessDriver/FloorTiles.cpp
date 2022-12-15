@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "CoinItem.h"
 #include "FloorTiles.h"
 #include "CarCharacter.h"
 #include "EndlessDriverGameModeBase.h"
@@ -71,7 +72,7 @@ void AFloorTiles::OnTriggerBoxOverlap(UPrimitiveComponent* OverlappedComponent, 
 void AFloorTiles::SpawnItems()
 {
 
-	if (IsValid(SmallObstacleClass) && IsValid(BigObstacleClass))
+	if (IsValid(SmallObstacleClass) && IsValid(BigObstacleClass) &&IsValid(CoinItemClass))
 	{
 	SpawnLaneItem(CenterLane);
 	SpawnLaneItem(LeftLane);
@@ -88,13 +89,17 @@ void AFloorTiles::SpawnLaneItem(UArrowComponent* Lane)
 
 	const FTransform& SpawnLocation = Lane->GetComponentTransform();
 
-	if (UKismetMathLibrary::InRange_FloatFloat(RandVal, 0.6f, 0.8f, true, true))
+	if (UKismetMathLibrary::InRange_FloatFloat(RandVal,SpawnPercent1, SpawnPercent2, true, true))
 	{
 		AObstacle* Obstacle = GetWorld()->SpawnActor<AObstacle>(SmallObstacleClass, SpawnLocation, SpawnParameters);
 	}
-	else if(UKismetMathLibrary::InRange_FloatFloat(RandVal, 0.8f, 1.f, true, true))
+	else if(UKismetMathLibrary::InRange_FloatFloat(RandVal, SpawnPercent2, SpawnPercent3, true, true))
 	{
 		AObstacle* Obstacle = GetWorld()->SpawnActor<AObstacle>(BigObstacleClass, SpawnLocation, SpawnParameters);
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(RandVal, SpawnPercent3, 1.f, true, true))
+	{
+		ACoinItem* CoinItem = GetWorld()->SpawnActor<ACoinItem>(CoinItemClass, SpawnLocation, SpawnParameters);
 	}
 }
 

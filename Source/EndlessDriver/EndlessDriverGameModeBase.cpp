@@ -6,6 +6,13 @@
 #include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+void AEndlessDriverGameModeBase::AddCoin()
+{
+	TotalCoins += 1;
+
+	UE_LOG(LogTemp, Warning, TEXT("totalCoins: %d"), TotalCoins);
+}
+
 void AEndlessDriverGameModeBase::BeginPlay()
 {
 	CreateInitialFloorTiles(); 

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "CarCharacter.generated.h"
 
+
 UCLASS()
 class ENDLESSDRIVER_API ACarCharacter : public ACharacter
 {
@@ -25,6 +26,15 @@ private:
 
 public:
 
+	UFUNCTION()
+		void AddCoin();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Assets")
+		class UParticleSystem* DeathParticleSystem;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Asetts")
+		class USoundBase* DeathSound;
+
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
 		int32 CurrentLane = 1;
 
@@ -40,6 +50,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Lane")
 		void ChangeLaneFinsihed();
 
+	UFUNCTION(BlueprintCallable)
+		void Death();
+
 
 	// Sets default values for this character's properties
 	ACarCharacter();
@@ -47,6 +60,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+		void OnDeath();
 
 	UFUNCTION()
 		void MoveLeft();
@@ -58,7 +74,11 @@ protected:
 		void MoveDown();
 
 	UPROPERTY()
-		class APlayerStart* PlayerStart;
+		FTimerHandle RestartTimerHandle;
+
+	UPROPERTY()
+		bool bIsDead = false;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

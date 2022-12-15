@@ -18,6 +18,9 @@ class ENDLESSDRIVER_API AEndlessDriverGameModeBase : public AGameModeBase
 
 public:
 
+	UPROPERTY(VisibleAnywhere)
+		int32 TotalCoins = 0;
+
 	UPROPERTY(EditAnywhere, Category = "Config")
 		TSubclassOf<AFloorTiles> FloorTilesClass;
 
@@ -38,6 +41,9 @@ public:
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Runtime")
 		FTransform NextSpawnPoint;
+
+	UFUNCTION(BlueprintCallable)
+		void AddCoin();
 
 protected:
 	virtual void BeginPlay() override;
